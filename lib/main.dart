@@ -1,3 +1,5 @@
+import 'package:capstone_project/screens/profile_screen.dart';
+
 import '../screens/home_screen.dart';
 import '../screens/request_form_screen.dart';
 import '../screens/register_screen.dart';
@@ -28,9 +30,8 @@ class Verifitor extends StatelessWidget {
             '/register': (context) => const RegisterScreen(),
             '/home': (context) => const HomeScreen(email: '',),
             '/form': (context) => const RequestFormScreen(),
+            '/profile': (context) => const ProfileScreen(),
 
-            // Assuming you'll have a home or dashboard later
-            // '/home': (context) => const HomeScreen(), 
           },
         );
       },

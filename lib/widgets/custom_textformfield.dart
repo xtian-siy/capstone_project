@@ -6,25 +6,28 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class CustomTextFormField extends StatelessWidget {
-  CustomTextFormField(
-      {super.key,
-      required this.validator,
-      required this.onSaved,
-      this.controller,
-      this.isObscure = false,
-      required this.fontSize,
-      required this.fontColor,
-      this.hintTextSize = 12,
-      this.hintText = '',
-      this.fillColor = Colors.black12,
-      required this.height,
-      required this.width,
-      this.keyboardType = TextInputType.text,
-      this.maxLength = 200});
+  CustomTextFormField({
+    super.key,
+    required this.validator,
+    required this.onSaved,
+    this.controller,
+    this.isObscure = false,
+    required this.fontSize,
+    required this.fontColor,
+    this.hintTextSize = 12,
+    this.hintText = '',
+    this.fillColor = Colors.black12,
+    this.suffixIcon,
+    required this.height,
+    required this.width,
+    this.keyboardType = TextInputType.text,
+    this.maxLength = 200,
+  });
 
   final validator;
-  final onSaved;
+  final Function(String?)? onSaved;
   final controller;
+  final Widget? suffixIcon;
   final isObscure;
   final fontSize;
   final fontColor;

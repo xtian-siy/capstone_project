@@ -1,6 +1,7 @@
+import 'package:capstone_project/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../constants.dart'; 
+import '../constants.dart';
 import 'request_form_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -39,21 +40,21 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       bottomNavigationBar: Container(
-        height: 80,
-        decoration: const BoxDecoration(
+        height: 80.h, // Scaled height
+        decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(20),
-            topRight: Radius.circular(20),
+            topLeft: Radius.circular(20.r), // Scaled radius
+            topRight: Radius.circular(20.r),
           ),
-          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 10)],
+          boxShadow: const [BoxShadow(color: Colors.black12, blurRadius: 10)],
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildNavigationItem(Icons.home_outlined, Icons.home, 0),
-            _buildNavigationItem(Icons.access_time, Icons.access_time_filled, 1),
-            _buildNavigationItem(Icons.assignment_outlined, Icons.assignment, 2),
+            Expanded(child: _buildNavigationItem(Icons.home_outlined, Icons.home, 0)),
+            Expanded(child: _buildNavigationItem(Icons.access_time, Icons.access_time_filled, 1)),
+            Expanded(child: _buildNavigationItem(Icons.assignment_outlined, Icons.assignment, 2)),
           ],
         ),
       ),
@@ -65,16 +66,16 @@ class _HomeScreenState extends State<HomeScreen> {
     return GestureDetector(
       onTap: () => _onTappedBar(index),
       child: Container(
-        width: 80,
-        height: 50,
+        alignment: Alignment.center,
+        height: 80.h, // Adjusted to fit within the bottom bar
         decoration: BoxDecoration(
           color: isSelected ? FB_PRIMARY : Colors.transparent,
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(10.r),
         ),
         child: Icon(
           isSelected ? activeIcon : icon,
           color: isSelected ? Colors.white : FB_DARK_PRIMARY,
-          size: 28,
+          size: 28.sp, // Scaled icon size
         ),
       ),
     );
@@ -85,16 +86,15 @@ class _HomeScreenState extends State<HomeScreen> {
       children: [
         // Blue Header
         Container(
-          height: ScreenUtil().setHeight(300),
+          height: 300.h, // Scaled header
           width: double.infinity,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             color: FB_PRIMARY,
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(85),
-              bottomRight: Radius.circular(85),
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.elliptical(200.w, 50.h), 
             ),
-            image: DecorationImage(
-              image: AssetImage('assets/image/BluePattern.jpg'), 
+            image: const DecorationImage(
+              image: AssetImage('assets/image/BluePattern.jpg'),
               fit: BoxFit.cover,
             ),
           ),
@@ -102,51 +102,103 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Align(
               alignment: Alignment.topRight,
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: CircleAvatar(
-                  backgroundColor: Colors.white.withOpacity(0.9),
-                  radius: 15,
-                  child: const Icon(Icons.person, size: 18, color: FB_PRIMARY),
+                padding: EdgeInsets.all(20.w),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => const ProfileScreen()), 
+                    );
+                  },
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white.withOpacity(0.9),
+                    radius: 18.r, // Scaled radius
+                    child: Icon(Icons.person, size: 20.sp, color: FB_PRIMARY),
+                  ),
                 ),
               ),
             ),
           ),
         ),
-        
-        
-        Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const SizedBox(height: 100), 
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: FB_DARK_PRIMARY,
-                  padding: const EdgeInsets.symmetric(horizontal: 45, vertical: 15),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                  elevation: 8,
+
+        Positioned(
+          top: 180.h, 
+          left: 25.w,
+          right: 25.w,
+          child: Container(
+            height: 150.h, // Scaled height
+            padding: EdgeInsets.all(15.w),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20.r),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 10.r,
+                  offset: Offset(0, 5.h),
                 ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const RequestFormScreen()),
-                  );
-                },
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
+              ],
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
                   children: [
-                    Text("REQUEST", 
-                      style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold)),
-                    SizedBox(width: 10),
-                    Icon(Icons.arrow_forward, color: Colors.white),
+                    CircleAvatar(
+                      backgroundColor: FB_DARK_PRIMARY.withOpacity(0.1),
+                      radius: 15.r,
+                      child: Icon(Icons.person, size: 20.sp, color: FB_DARK_PRIMARY),
+                    ),
+                    SizedBox(width: 10.w),
+                    Text(
+                      "Admin",
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.sp),
+                    ),
                   ],
                 ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Icon(Icons.notifications_none, size: 24.sp, color: Colors.black54),
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        Align(
+          alignment: Alignment.bottomCenter,
+          child: Padding(
+            padding: EdgeInsets.only(bottom: 60.h), 
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: FB_DARK_PRIMARY,
+                padding: EdgeInsets.symmetric(horizontal: 45.w, vertical: 15.h),
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(15.r)),
+                elevation: 8,
               ),
-            ],
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const RequestFormScreen()),
+                );
+              },
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text("REQUEST",
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.bold)),
+                  SizedBox(width: 30.w),
+                  Icon(Icons.arrow_forward, color: Colors.white, size: 20.sp),
+                ],
+              ),
+            ),
           ),
         ),
       ],
     );
   }
 }
-

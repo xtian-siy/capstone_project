@@ -1,4 +1,6 @@
+import 'package:capstone_project/screens/payment_details_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../constants.dart';
 
 class RequestFormScreen extends StatefulWidget {
@@ -9,7 +11,15 @@ class RequestFormScreen extends StatefulWidget {
 }
 
 class _RequestFormScreenState extends State<RequestFormScreen> {
-  String? selectedDoc;
+  // 1. Controllers for TextFields
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _yearController = TextEditingController();
+  final TextEditingController _otherPurposeController = TextEditingController();
+
+  // 2. State variables for Dropdowns
+  String? _selectedDoc;
+  String? _selectedPurp;
+
   final List<String> documents = [
     'Transcript of Records',
     'Diploma',
@@ -17,7 +27,6 @@ class _RequestFormScreenState extends State<RequestFormScreen> {
     'Good Moral'
   ];
 
-  String? selectedPurp;
   final List<String> purposes = [
     'Employment',
     'Board Exam',
@@ -25,6 +34,99 @@ class _RequestFormScreenState extends State<RequestFormScreen> {
     'Transfer to another school',
     'Others'
   ];
+
+  final Map<String, double> docPrices = {
+    'Transcript of Records': 350.00,
+    'Diploma': 200.00,
+    'Form 137': 150.00,
+    'Good Moral': 100.00,
+  };
+
+  @override
+  void dispose() {
+  
+    _nameController.dispose();
+    _yearController.dispose();
+    _otherPurposeController.dispose();
+    super.dispose();
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.r)),
+        title: Text(
+          "Validation Error",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 18.sp,
+            color: Colors.redAccent,
+          ),
+        ),
+        content: Text(
+          message,
+          style: TextStyle(fontSize: 14.sp),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(),
+            child: Text(
+              "Okay",
+              style: TextStyle(
+                color: FB_PRIMARY,
+                fontWeight: FontWeight.bold,
+                fontSize: 16.sp,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  // 4. Manual Validation and Submission Logic
+  void _validateAndSubmit() {
+    String name = _nameController.text.trim();
+    String year = _yearController.text.trim();
+    String otherPurpose = _otherPurposeController.text.trim();
+
+    if (_selectedDoc == null) {
+      _showErrorDialog("Please select a document.");
+      return;
+    }
+
+    if (name.isEmpty) {
+      _showErrorDialog("Full name is required.");
+      return;
+    }
+
+    if (year.isEmpty) {
+      _showErrorDialog("Please provide the School Year or Year Graduated.");
+      return;
+    }
+
+    if (_selectedPurp == null) {
+      _showErrorDialog("Please select the purpose of your request.");
+      return;
+    }
+
+    if (_selectedPurp == 'Others' && otherPurpose.isEmpty) {
+      _showErrorDialog("Please specify your purpose.");
+      return;
+    }
+
+    // Success: Proceed to Payment Screen
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PaymentScreen(
+          documentName: _selectedDoc!,
+          amount: docPrices[_selectedDoc] ?? 0.0,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,12 +137,17 @@ class _RequestFormScreenState extends State<RequestFormScreen> {
         elevation: 0,
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(Icons.chevron_left, color: Colors.white, size: 30),
+          icon: Icon(Icons.chevron_left, color: Colors.white, size: 30.sp),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text("Request Form",
-            style: TextStyle(
-                color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold)),
+        title: Text(
+          "Request Form",
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 24.sp,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -48,70 +155,82 @@ class _RequestFormScreenState extends State<RequestFormScreen> {
             child: ConstrainedBox(
               constraints: BoxConstraints(minHeight: constraints.maxHeight),
               child: Padding(
-                padding: const EdgeInsets.all(30.0),
-                child: IntrinsicHeight( 
+                padding: EdgeInsets.all(30.w),
+                child: IntrinsicHeight(
                   child: Column(
                     children: [
-                      // Document Selection
+                      // Document Dropdown
                       DropdownButtonFormField<String>(
-                        value: selectedDoc,
+                        value: _selectedDoc,
                         hint: const Text("Select Document"),
                         decoration: _inputDecoration(),
                         items: documents
                             .map((doc) => DropdownMenuItem(value: doc, child: Text(doc)))
                             .toList(),
-                        onChanged: (val) => setState(() => selectedDoc = val),
+                        onChanged: (val) => setState(() => _selectedDoc = val),
                       ),
-                      const SizedBox(height: 20),
+                      SizedBox(height: 20.h),
 
-                      TextFormField(decoration: _inputDecoration(hint: "Full Name")),
-                      const SizedBox(height: 20),
+                      // Name Field
+                      TextFormField(
+                        controller: _nameController,
+                        decoration: _inputDecoration(hint: "Full Name"),
+                      ),
+                      SizedBox(height: 20.h),
 
-                      TextFormField(decoration: _inputDecoration(hint: "Year Graduated")),
-                      const SizedBox(height: 20),
+                      // Year Field
+                      TextFormField(
+                        controller: _yearController,
+                        key: ValueKey(_selectedDoc),
+                        keyboardType: TextInputType.number,
+                        decoration: _inputDecoration(
+                          hint: _selectedDoc != null ? "Year Graduated" : "School Year",
+                        ),
+                      ),
+                      SizedBox(height: 20.h),
 
+                      // Purpose Dropdown
                       DropdownButtonFormField<String>(
-                        value: selectedPurp,
+                        value: _selectedPurp,
                         hint: const Text("Select Purpose"),
                         decoration: _inputDecoration(),
                         items: purposes
-                            .map((purpose) => DropdownMenuItem(
-                                value: purpose, child: Text(purpose)))
+                            .map((p) => DropdownMenuItem(value: p, child: Text(p)))
                             .toList(),
-                        onChanged: (val) => setState(() => selectedPurp = val),
+                        onChanged: (val) => setState(() => _selectedPurp = val),
                       ),
 
-                      // Condition for 'Others'
-                      if (selectedPurp == 'Others') ...[
-                        const SizedBox(height: 20),
+                      // Conditional Others Field
+                      if (_selectedPurp == 'Others') ...[
+                        SizedBox(height: 20.h),
                         TextFormField(
+                          controller: _otherPurposeController,
                           decoration: _inputDecoration(hint: "Please specify purpose"),
                         ),
                       ],
 
-                      
                       const Spacer(),
+                      SizedBox(height: 20.h),
 
-                      const SizedBox(height: 20),
-
+                      // Submit Button
                       Align(
                         alignment: Alignment.bottomRight,
                         child: SizedBox(
-                          width: 140,
-                          height: 45,
+                          width: 140.w,
+                          height: 45.h,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: FB_DARK_PRIMARY,
                               shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8)),
+                                  borderRadius: BorderRadius.circular(8.r)),
                             ),
-                            onPressed: () {
-                              // Handle submission
-                            },
-                            child: const Text("SUBMIT",
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold)),
+                            onPressed: _validateAndSubmit,
+                            child: const Text(
+                              "SUBMIT",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
                           ),
                         ),
                       ),
@@ -131,13 +250,13 @@ class _RequestFormScreenState extends State<RequestFormScreen> {
       hintText: hint,
       filled: true,
       fillColor: Colors.white,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+      contentPadding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(5.r),
         borderSide: BorderSide(color: Colors.grey.shade300),
       ),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(5.r),
         borderSide: BorderSide(color: Colors.grey.shade300),
       ),
     );

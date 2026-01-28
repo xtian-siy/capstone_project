@@ -18,6 +18,11 @@ class _LogInScreenState extends State<LogInScreen> {
   TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+  bool _isPasswordVisible = false;
+
+   String correctUsername = "User@gmail.com";
+  String correctPassword = "User1234";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,7 +66,7 @@ class _LogInScreenState extends State<LogInScreen> {
                   hintTextSize: 14.sp,
                   fontColor: Colors.black,
                   validator: (value) => value!.isEmpty ? 'Enter email' : null,
-                  onSaved: (value) => emailController.text = value!,
+                  onSaved: (value) => correctUsername = value!,
                 ),
                 SizedBox(height: 15.h),
                 
@@ -70,13 +75,26 @@ class _LogInScreenState extends State<LogInScreen> {
                   height: ScreenUtil().setHeight(10),
                   width: ScreenUtil().setWidth(10),
                   controller: passwordController,
-                  isObscure: true,
+                  isObscure: false,
                   hintText: 'Password',
                   fontSize: 14.sp,
                   hintTextSize: 14.sp,
                   fontColor: Colors.black,
                   validator: (value) => value!.isEmpty ? 'Enter password' : null,
-                  onSaved: (value) => passwordController.text = value!,
+                  onSaved: (value) => correctPassword = value!,
+                  suffixIcon: IconButton(
+                    padding: EdgeInsets.zero,
+                    icon: Icon(
+                      _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                      color: FB_DARK_PRIMARY,
+                      size: 20.sp,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _isPasswordVisible = !_isPasswordVisible;
+                      });
+                    },
+                  ),
                 ),
 
                 // Forgot Password
