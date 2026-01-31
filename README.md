@@ -1,3 +1,3 @@
-# capstone_project
+# VerifiTOR Mobile Application capstone_project
 
-A new Flutter project.
+VerifiTOR's Mobile Application repository using Flutter
