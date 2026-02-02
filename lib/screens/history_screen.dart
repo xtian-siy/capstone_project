@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import '../constants.dart';
 import '../widgets/custom_font.dart';
 
-// Model to match the "PendingRequest" structure
+
 class HistoryItem {
   final String title;
   final DateTime date;
@@ -21,7 +21,7 @@ class HistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FA), // Matches Pending Background
+      backgroundColor: const Color(0xFFF8F9FA), 
       body: Column(
         children: [
           Container(
@@ -64,7 +64,6 @@ class HistoryScreen extends StatelessWidget {
   }
 
   Widget _buildHistoryCard(HistoryItem item) {
-    // Formatting to match Pending Screen exactly
     String dateStr = DateFormat('MMMM d, y').format(item.date);
     String timeStr = DateFormat('h:mm a').format(item.date);
 
