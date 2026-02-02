@@ -85,7 +85,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text("Edit Profile", style: TextStyle(color: Colors.white, fontSize: 18.sp)),
-        backgroundColor: const Color(0xFF1E1E1E),
+        backgroundColor: const Color(0xFF5D7E97),
         iconTheme: const IconThemeData(color: Colors.white),
         elevation: 0,
       ),
