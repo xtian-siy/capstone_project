@@ -1,5 +1,6 @@
 import 'package:capstone_project/screens/pending_screen.dart';
 import 'package:capstone_project/screens/profile_screen.dart';
+import 'package:capstone_project/screens/history_screen.dart'; 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../constants.dart';
@@ -15,26 +16,38 @@ class HomeScreen extends StatefulWidget {
     this.newRequest,
   });
 
+  
+  static List<PendingRequest> globalRequests = [];
+  static List<HistoryItem> globalHistory = [];
+
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  static List<PendingRequest> globalRequests = [];
   late int _selectedIndex;
   late PageController _pageController;
-
 
   @override
   void initState() {
     super.initState();
     _selectedIndex = widget.initialIndex;
     _pageController = PageController(initialPage: _selectedIndex);
-     
 
-    
     if (widget.newRequest != null) {
-      globalRequests.add(widget.newRequest!);
+      
+      bool exists = HomeScreen.globalRequests.any((req) => 
+        req.dateCreated == widget.newRequest!.dateCreated);
+
+      if (!exists) {
+        HomeScreen.globalRequests.add(widget.newRequest!);
+        
+        HomeScreen.globalHistory.insert(0, HistoryItem(
+          title: widget.newRequest!.docName,
+          date: widget.newRequest!.dateCreated,
+          isApproved: true, 
+        ));
+      }
     }
   }
 
@@ -61,11 +74,8 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         children: [
           _buildHomeContent(context),
-
-         
-          PendingScreen(requestList: globalRequests),
-
-          const Center(child: Text("History")),
+          PendingScreen(requestList: HomeScreen.globalRequests),
+          HistoryScreen(historyList: HomeScreen.globalHistory),
         ],
       ),
       bottomNavigationBar: Container(
@@ -90,6 +100,8 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  // ... (Keep your _buildNavigationItem and _buildHomeContent as they were)
+  
   Widget _buildNavigationItem(IconData icon, IconData activeIcon, int index) {
     bool isSelected = _selectedIndex == index;
     return GestureDetector(
@@ -148,7 +160,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
-
         Positioned(
           top: 180.h,
           left: 25.w,
@@ -192,7 +203,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ),
-
         Align(
           alignment: Alignment.bottomCenter,
           child: Padding(

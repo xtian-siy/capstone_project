@@ -209,26 +209,41 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   }
 
   void _handleResetPassword() {
-    String newPass = _newPassController.text.trim();
-    String conPass = _conPassController.text.trim();
+  String newPass = _newPassController.text.trim();
+  String conPass = _conPassController.text.trim();
 
-    if (newPass.isEmpty || conPass.isEmpty) {
-      _showValidationError("Please fill in both password fields.");
-      return;
-    }
+  final complexityRegex = RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*[!@#\$%^&*(),.?":{}|<>]).*$');
 
-    if (newPass.isNotEmpty && conPass.isNotEmpty) {
-    if (newPass == conPass) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const LogInScreen()),
-      );
-    } else {
-      _showValidationError("Passwords do not match.");
-    }
-  } else {
+  // 1. Check if empty
+  if (newPass.isEmpty || conPass.isEmpty) {
     _showValidationError("Please fill in both password fields.");
+    return;
   }
+
+  if (newPass.length < 8) {
+    _showValidationError("Password must be at least 8 characters long.");
+    return;
+  }
+
+  if (!complexityRegex.hasMatch(newPass)) {
+    _showValidationError("Password must include an uppercase, lowercase, number, and special character.");
+    return;
+  }
+
+  if (newPass != conPass) {
+    _showValidationError("Passwords do not match.");
+    return;
+  }
+
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(content: Text("Password reset successfully!")),
+  );
+
+  Navigator.pushAndRemoveUntil(
+    context,
+    MaterialPageRoute(builder: (context) => const LogInScreen()),
+    (route) => false, 
+  );
 }
 
   @override

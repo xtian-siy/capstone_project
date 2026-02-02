@@ -1,3 +1,4 @@
+import 'package:capstone_project/screens/edit_profile_screen.dart';
 import 'package:capstone_project/screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -76,7 +77,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
           SizedBox(height: 30.h),
 
           ElevatedButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const EditProfileScreen()),
+              );
+            },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF233446),
               padding: EdgeInsets.symmetric(horizontal: 35.w, vertical: 10.h),
