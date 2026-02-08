@@ -28,7 +28,7 @@ class _LogInScreenState extends State<LogInScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: SingleChildScrollView(
         child: Container(
           height: ScreenUtil().screenHeight,
@@ -175,8 +175,9 @@ class _LogInScreenState extends State<LogInScreen> {
                         "Don't have an account? ",
                         style:
                             TextStyle(fontSize: 13.sp, color: Colors.black54),
+                            
                       ),
-                      GestureDetector(
+                       GestureDetector(
                         onTap: () => Navigator.pushNamed(context, '/register'),
                         child: Text(
                           'Sign up',
@@ -187,7 +188,24 @@ class _LogInScreenState extends State<LogInScreen> {
                           ),
                         ),
                       ),
-                    ],
+                     
+                       Text(
+                        "Choose actor ",
+                        style:
+                            TextStyle(fontSize: 13.sp, color: Colors.black54),
+                      ),
+                      GestureDetector(
+                        onTap: () => Navigator.pushNamed(context, '/choose'),
+                        child: Text(
+                          'Choose actor',
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13.sp,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ],    
                   ),
                 ),
               ],

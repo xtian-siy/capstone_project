@@ -166,7 +166,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     children: [
                       Text("Already have an account? ", style: TextStyle(fontSize: 13.sp)),
                       GestureDetector(
-                        onTap: () => Navigator.pop(context),
+                       // onTap: () => Navigator.pop(context),
                         child: Text(
                           'Login',
                           style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13.sp, color: FB_DARK_PRIMARY),

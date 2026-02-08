@@ -1,3 +1,4 @@
+import 'package:capstone_project/screens/choose_actor_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -26,8 +27,9 @@ class Verifitor extends StatelessWidget {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'Verifitor App',
-          initialRoute: '/login',
+          initialRoute: '/choose',
           routes: {
+            '/choose': (context) => const ChooseActorScreen(),
             '/login': (context) => const LogInScreen(),
             '/register': (context) => const RegisterScreen(),
 

@@ -16,7 +16,7 @@ class HomeScreen extends StatefulWidget {
     this.newRequest,
   });
 
-  
+
   static List<PendingRequest> globalRequests = [];
   static List<HistoryItem> globalHistory = [];
 
