@@ -13,9 +13,7 @@ class ChooseActorScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Defining the blue color from your image
-    const Color primaryBlue = Color(0xFF5D7D95); 
-
+  
     return Scaffold(
       backgroundColor: Colors.white,
       body: Column(
@@ -25,18 +23,20 @@ class ChooseActorScreen extends StatelessWidget {
             flex: 2,
             child: Center(
               child: Padding(
-                padding: EdgeInsets.only(top: 40.h),
+               padding: EdgeInsets.only(top: 40.h),
+               
                 child: Image.asset(
                   'assets/logo/logo.png', // Ensure this points to your logo with the tagline
-                  height: 120.h,
+                  height: 80.h,
                   errorBuilder: (context, error, stackTrace) =>
                       Icon(Icons.image, size: 50.h),
                 ),
+                
               ),
             ),
           ),
+    
 
-         
 
           // Bottom Section: Role Selection
           Expanded(
@@ -44,12 +44,13 @@ class ChooseActorScreen extends StatelessWidget {
             child: Container(
               width: double.infinity,
               decoration: BoxDecoration(
-                color: FB_DARK_PRIMARY,
+                color: FB_PRIMARY,
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(30.r),
                   topRight: Radius.circular(30.r),
                 ),
               ),
+
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -107,6 +108,8 @@ class ChooseActorScreen extends StatelessWidget {
               ),
             ),
           ),
+
+
         ],
       ),
     );
